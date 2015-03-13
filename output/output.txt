@@ -1,1 +1,0 @@
-O Conjunto universo.txt NÃO é SubConjunto do Conjunto file1.txt

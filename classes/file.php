@@ -8,9 +8,33 @@
 
 class file {
     var $conjunto;
-    function loadingFile($nomeArquivo, $tipo, $conjunto = null){
+    function moveFiles($arquivos){
         try{
-            $arquivo = fopen("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/files/$nomeArquivo",$tipo);
+            $files = self::loadingFilesDirectorios("files/");
+            foreach($files as $f){
+                if(file_exists("E:/xampp/htdocs/Produto-Cartesiano/files/".$f['Nome'])){
+                    unlink("E:/xampp/htdocs/Produto-Cartesiano/files/".$f['Nome']);
+                }
+            }
+           $location = 'E:/xampp/htdocs/Produto-Cartesiano/files/';
+           foreach($arquivos['tmp_name'] as $k => $file){
+               if(!move_uploaded_file($file, $location."palavras".($k+1).".txt")){
+                    print_r("Houve um erro ao mover o arquivo");
+                    exit;
+                }
+           }
+            return "Arquivo movidos com sucesso!";
+        }catch (Exception $e){
+            exit($e->getMessage());
+        }
+    }
+    function loadingFile($nomeArquivo, $tipo, $caminho = null, $conjunto = null){
+        try{
+            if($caminho == null){
+                $arquivo = fopen("E:/xampp/htdocs/Produto-Cartesiano/files/$nomeArquivo","r");
+            }else{
+                $arquivo = fopen("E:/xampp/htdocs/Produto-Cartesiano/$caminho/$nomeArquivo","r");
+            }
             if($tipo == "r"){
                 if ($arquivo == false) die('Não foi possível abrir o arquivo.');
                 while(true) {
@@ -23,7 +47,7 @@ class file {
                 fclose($arquivo);
                 return $conjunto;
             }elseif($tipo == "w+"){
-                $arquivo = fopen("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/files/$nomeArquivo",$tipo);
+                $arquivo = fopen("E:/xampp/htdocs/Produto-Cartesiano/files/$nomeArquivo",$tipo);
                 if (!fwrite($arquivo, ' ')) die('Nao foi possIvel atualizar o arquivo.');
                 fclose($arquivo);
             }
@@ -39,7 +63,7 @@ class file {
         while($arquivo = $diretorio->read()){
             if($arquivo != "." && $arquivo != ".."){
                 $conteudo = $diferect == null ? self::readingFile($arquivo):self::readingFile($arquivo,$diferect);
-                $files[$c] = ["Nome"=>$arquivo, "Caminho"=>$caminho,"Conteudo"=>$conteudo];
+                $files[$c] = ["Nome"=>$arquivo, "Caminho"=>$caminho,"Conteudo"=>$conteudo,"Estrutura"=>self::loadingFile($arquivo,"r",$diferect)];
                 $c++;
             }
         }
@@ -48,9 +72,9 @@ class file {
     }
     function readingFile($nomeArquivo, $caminho = null){
         if($caminho == null){
-            $arquivo = fopen("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/files/$nomeArquivo","r");
+            $arquivo = fopen("E:/xampp/htdocs/Produto-Cartesiano/files/$nomeArquivo","r");
         }else{
-            $arquivo = fopen("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/$caminho/$nomeArquivo","r");
+            $arquivo = fopen("E:/xampp/htdocs/Produto-Cartesiano/$caminho/$nomeArquivo","r");
         }
 
         if ($arquivo == false) die('Não foi possível abrir o arquivo.');
@@ -66,10 +90,10 @@ class file {
     }
     function writeFile($caminho, $arquivo, $valores){
         try{
-            if(file_exists("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/$caminho/$arquivo")){
-                unlink("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/$caminho/$arquivo");
+            if(file_exists("E:/xampp/htdocs/Produto-Cartesiano/$caminho/$arquivo")){
+                unlink("E:/xampp/htdocs/Produto-Cartesiano/$caminho/$arquivo");
             }
-            $fp = fopen("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/$caminho/$arquivo","a");
+            $fp = fopen("E:/xampp/htdocs/Produto-Cartesiano/$caminho/$arquivo","a");
             foreach($valores as $v){
                 $conteudo = $v."\r\n";
                 fwrite($fp, $conteudo);
@@ -80,10 +104,10 @@ class file {
         }
     }
     function writeText($caminho, $arquivo, $texto){
-        if(file_exists("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/$caminho/$arquivo")){
-            unlink("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/$caminho/$arquivo");
+        if(file_exists("E:/xampp/htdocs/Produto-Cartesiano/$caminho/$arquivo")){
+            unlink("E:/xampp/htdocs/Produto-Cartesiano/$caminho/$arquivo");
         }
-        $fp = fopen("E:/xampp/htdocs/Algebra-de-Conjuntos-com-PHP/$caminho/$arquivo","a");
+        $fp = fopen("E:/xampp/htdocs/Produto-Cartesiano/$caminho/$arquivo","a");
 
         $conteudo = $texto;
         fwrite($fp, $conteudo);

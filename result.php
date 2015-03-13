@@ -6,81 +6,37 @@
  * Time: 14:13
  */
 require "classes/file.php";
-if(isset($_GET)){
-    $tipo = $_GET['optionTipo'];
+if(isset($_POST)){
     $instancia = new file();
-    $file1 = $instancia->loadingFile("file1.txt","r");
-    $file2 = $instancia->loadingFile("file2.txt","r");
-    $universo = $instancia->loadingFile("universo.txt","r");
-    switch($tipo){
-        case"Pertinencia":
-            $elemento = $_GET['Elemento'];
-            $arquivo = $_GET['optionSelection'];
+    if(!isset($_POST['Verificar'])){
+        $msg = $instancia->moveFiles($_FILES['inputFiles']);
+    }else{
+        $files = $instancia->loadingFilesDirectorios("E:/xampp/htdocs/Produto-Cartesiano/files");
+        $filePrincipal = $files[0]["Estrutura"];
+        $filesComplementares = "";
+        $i = 1;
+        while($i < count($files)){
+            $filesComplementares[] = $files[$i]["Estrutura"];
 
-            if($arquivo == "file1.txt"){
-                $file = $file1;
-            }elseif($arquivo == "file2.txt"){
-                $file = $file2;
-            }else{
-                $file = $universo;
-            }
-            $existe = in_array($elemento, $file);
-            if($existe){
-                $instancia->writeText("output","output.txt", "O Elemento ".$elemento." está contido no Conjunto ".$arquivo);
-            }else{
-                $instancia->writeText("output","output.txt", "O Elemento ".$elemento." NÃO está contido no Conjunto ".$arquivo);
-            }
-            break;
-        case"Contingencia":
-            $arquivo1 = $_GET['optionSelection1'];
-            $arquivo2 = $_GET['optionSelection2'];
+            $i++;
+        }
+        $newFile = "";
+        foreach($filePrincipal as $k => $file){
+            $newFile[] .= $file ." ". $filesComplementares[0][0]." ".$filesComplementares[1][0];
+            $newFile[] .= $file ." ". $filesComplementares[0][0]." ".$filesComplementares[1][1];
 
-            if($arquivo1 == "file1.txt"){
-                $file_1 = $file1;
-            }elseif($arquivo1 == "file2.txt"){
-                $file_1 = $file2;
-            }else{
-                $file_1 = $universo;
-            }
+            $newFile[] .= $file ." ". $filesComplementares[0][1]." ".$filesComplementares[1][0];
+            $newFile[] .= $file ." ". $filesComplementares[0][1]." ".$filesComplementares[1][1];
+        }
 
-            if($arquivo2 == "file1.txt"){
-                $file_2 = $file1;
-            }elseif($arquivo2 == "file2.txt"){
-                $file_2 = $file2;
-            }else{
-                $file_2 = $universo;
-            }
-
-            $result1 = array_diff($file_2,$file_1);
-            $result2 = array_diff($file_1,$file_2);
-
-            if(empty($result2) && count($result1) > 0){
-                $instancia->writeText("output","output.txt", "O Conjunto ".$arquivo1." é SubConjunto próprio do Conjunto ".$arquivo2);
-            }else{
-                if(empty($result2) && empty($result1)){
-                    $instancia->writeText("output","output.txt", "O Conjunto ".$arquivo1." é SubConjunto do Conjunto ".$arquivo2);
-                }else{
-                    $instancia->writeText("output","output.txt", "O Conjunto ".$arquivo1." NÃO é SubConjunto do Conjunto ".$arquivo2);
-                }
-            }
-            break;
-        case"Uniao":
-            $result = array_unique(array_merge($file1, $file2));
-            $instancia->writeFile("output","output.txt",$result);
-            break;
-        case"Interseccao":
-            $result = array_uintersect($file1, $file2,"strcasecmp");
-            $instancia->writeFile("output","output.txt",$result);
-            break;
-        default:
-            echo"Nao foi possivel encontrar o Tipo";
-            break;
-        case"Complemento":
-            $result = array_diff($universo, $file1);
-            $instancia->writeFile("output","output.txt",$result);
-            break;
+        $instancia->writeFile("output/","pc.txt",$newFile);
+        $msg = "Arquivo saida gerado com sucesso";
     }
-    header("location:/Algebra-de-Conjuntos-com-PHP?optionTipo=".$tipo);
+    if(isset($msg)){
+        header("location:/Produto-Cartesiano?msg=".$msg);
+    }else{
+        header("location:/Produto-Cartesiano");
+    }
 }else{
-    echo "Necessita de uma requisicao GET";
+    echo "Necessita de uma requisicao POST";
 }

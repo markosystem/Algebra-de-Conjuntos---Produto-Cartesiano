@@ -12,10 +12,11 @@ p{
 </style>
 <body style="background-color: white;">
 <div class="container">
-    <h1>Álgebra de Conjuntos</h1>
+    <h1>Álgebra de Conjuntos - Produto Cartesiano</h1>
     <blockquote>
-        <p style="text-align: justify;">Álgebra é constituída de operações definidas sobre uma soleção de objetos. Neste contexto, álgebra de conjuntos corresponderia às operações definidas sobre todos os conjuntos.
-            <a href="javascript:modalFunction();" class="label label-primary">Funções em PHP para Conjuntos</a>
+        <p style="text-align: justify;">
+            A operação produto cartesiano é uma operação binária que, quando aplicada a dois conjuntos A e B resulta em um conjunto constituído de sequências de duas componentes (tuplas), sendo que a primeira componente de cada sequência é um elemento de A, e a segunda componente, um elemento de B.
+            Uma sequência de n componentes, denominada n-upla ordenada, consiste de n objetos (não necessariamente distintos) em uma ordem fixa. Por exemplo, uma 2-upla ordenada é denominada par ordenado. Um par ordenado no qual a primeira componente é x e a segunda é y é definido como ⟨x,y⟩.
         </p>
     </blockquote>
     <div class="list-group">
@@ -25,79 +26,90 @@ p{
             $files = $instancia->loadingFilesDirectorios("files/");
             $filesOutput = $instancia->loadingFilesDirectorios("output/", "output");
         ?>
-        <?php if(count($files) == 0): ?>
-            <div class="list-group-item">
-                <div class="row-action-primary">
-                    <i class="mdi-notification-dnd-forwardslash"></i>
+        <div class="col-lg-12">
+            <p style="text-align: justify;">
+                <small>Exercício 2.8:
+                    Crie um programa que lê n arquivos de entrada. Cada arquivo contém uma palavra em cada linha. O programa deve ler os arquivos e gerar um arquivo de saída chamado pc.txt contendo o produto cartesiano entre as palavras dos arquivos de entrada. Cada linha do arquivo de saída deve representar um elemento do produto cartesiano (uma n-upla) cujos componentes devem estar separados por um espaço [em branco].
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2>Arquivos de Entrada</h2>
                 </div>
-                <div class="row-content">
-                    <h4 class="list-group-item-heading">Não há arquivos no Diretório.</h4>
+                <div class="col-lg-4">
+                    <small>
+                        <form method="post" action="result.php" enctype="multipart/form-data">
+                        <input type="text" readonly="" class="form-control floating-label" placeholder="Carregar Arquivos...">
+                        <input type="file" name="inputFiles[]" id="inputFiles" multiple="" required="" accept=".txt,.csv">
+                        <input class="btn btn-sm btn-primary" type="submit" value="Enviar">
+                        </form>
+                    </small>
                 </div>
             </div>
-        <?php else: ?>
-            <div class="col-lg-12">
-                <p style="text-align: justify;">
-                    <small>Exercício 2.3:Considerando uma linguagem de programação que forneça suporte a conjuntos e operações sobre eles, crie um programa que leia conjuntos em arquivos texto (um elemento do conjunto em cada linha) e gere a saída também em um arquivo texto (também um elemento em cada linha). O programa deve considerar e demonstrar a utilização das operações e propriedades vistas até o momento (e.g. pertiência, contingência, união e intersecção).</small>
-                </p>
-            </div>
-            <div class="col-lg-6">
-                <h2>Arquivos de Entrada</h2>
-                <form action="result.php" method="get" id="formPrincipal">
+            <?php if(count($files) == 0): ?>
+                <div class="list-group-item">
+                    <div class="row-action-primary">
+                        <i class="mdi-notification-dnd-forwardslash"></i>
+                    </div>
+                    <div class="row-content">
+                        <h4 class="list-group-item-heading">Não há arquivos no Diretório.</h4>
+                    </div>
+                </div>
+            <?php else: ?>
+                <form action="result.php" method="post" id="formPrincipal2">
                     <?php foreach($files as $f): ?>
                         <div class="list-group-item">
                             <div class="row-action-primary">
                                 <i class="mdi-action-description"></i>
                             </div>
                             <div class="row-content">
-                                <h4 class="list-group-item-heading">Conteúdo: <?= $f['Conteudo'] ?></h4>
-                                <p class="list-group-item-text">Nome: <a href="<?= $f['Caminho'].$f['Nome'] ?>" target="_blank"><?= $f['Nome'] ?></a></p>
+                                <h4 class="list-group-item-heading"><b>Conteúdo</b><br/>
+                                    <?php foreach($f['Estrutura'] as $a): ?>
+                                        <?= "<i>".$a."</i><br/>" ?>
+                                    <?php endforeach; ?>
+                                </h4>
+                                <p class="list-group-item-text"><b>Link:</b> <a href="<?= $f['Caminho'].$f['Nome'] ?>" target="_blank"><?= $f['Nome'] ?></a></p>
                             </div>
                         </div>
                     <?php endforeach; ?>
-                    <div class="radio radio-primary">
-                        <label title="Arquivos: file1.txt e file2.txt" >
-                            <input type="radio" name="optionTipo"  value="Pertinencia"  <?= isset($_GET['optionTipo']) ? ($_GET['optionTipo'] == "Pertinencia" ? 'checked':'' ):'' ?> required="" >Pertinência
-                        </label>
-                        <label>
-                            <input type="radio" name="optionTipo"  value="Contingencia" <?= isset($_GET['optionTipo']) ? ($_GET['optionTipo'] == "Contingencia" ? 'checked':'' ):'' ?> required="">Contingência
-                        </label>
-                        <label>
-                            <input type="radio" name="optionTipo"  value="Uniao" <?= isset($_GET['optionTipo']) ? ($_GET['optionTipo'] == "Uniao" ? 'checked':'' ):'' ?> required="">União
-                        </label>
-                        <label>
-                            <input type="radio" name="optionTipo" value="Interseccao" <?= isset($_GET['optionTipo']) ? ($_GET['optionTipo'] == "Interseccao" ? 'checked':'' ):'' ?> required="">Intersecção
-                        </label>
-                        <label>
-                            <input type="radio" name="optionTipo" value="Complemento" <?= isset($_GET['optionTipo']) ? ($_GET['optionTipo'] == "Complemento" ? 'checked':'' ):'' ?> required="">Complemento
-                        </label>
-                    </div>
-                    <button type="button" class="btn btn-primary" id="btnVerificar">Verificar</button>
+                    <input type="button" class="btn btn-primary" id="btnVerificar" value="Verificar" />
+                    <input type="hidden" name="Verificar" id="inputVerificar">
                 </form>
                 <div class="list-group-separator"></div>
-            </div>
-            <div class="col-lg-6">
-                <h2>Arquivo de Saída (Output)</h2>
+            <?php endif; ?>
+        </div>
+        <div class="col-lg-6">
+            <h2>Arquivo de Saída(Output)</h2>
+            <?php if(count($filesOutput) == 0): ?>
+                <div class="list-group-item">
+                    <div class="row-action-primary">
+                        <i class="mdi-notification-dnd-forwardslash"></i>
+                    </div>
+                    <div class="row-content">
+                        <h4 class="list-group-item-heading">Não há arquivos no Diretório.</h4>
+                    </div>
+                </div>
+            <?php else: ?>
                 <?php foreach($filesOutput as $f): ?>
                     <div class="list-group-item">
                         <div class="row-action-primary">
                             <i class="mdi-action-description"></i>
                         </div>
                         <div class="row-content">
-                            <h4 class="list-group-item-heading">Conteúdo: <?= $f['Conteudo'] ?></h4>
-                            <p class="list-group-item-text">Nome: <a href="<?= $f['Caminho'].$f['Nome'] ?>" target="_blank"><?= $f['Nome'] ?></a></p>
+                            <h4 class="list-group-item-heading"><b>Conteúdo</b><br/>
+                                <?php foreach($f['Estrutura'] as $a): ?>
+                                    <?= "<i>".$a."</i><br/>" ?>
+                                <?php endforeach; ?>
+                            </h4>
+                            <p class="list-group-item-text"><b>Link:</b> <a href="<?= $f['Caminho'].$f['Nome'] ?>" target="_blank"><?= $f['Nome'] ?></a></p>
                         </div>
                     </div>
                 <?php endforeach; ?>
-                <hr/><br/><br/>
-                <a href="javascript:modalQuestao21()" class="btn btn-info">Questão 2.1</a>
-                <a href="javascript:modalQuestao24()" class="btn btn-info">Questão 2.4</a>
-                <a href="javascript:modalSobre()" class="btn btn-info">Informações</a>
-            </div>
-
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
-
 <div id="source-modal" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg" style="width: 80%;">
         <div class="modal-content">
@@ -177,167 +189,21 @@ if(empty($result2) && count($result1) > 0){<code style="color:#15c000;">//Verifi
         </div>
     </div>
 </div>
-
-<div id="source-modal2" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Pertinência</h4>
-            </div>
-            <div class="modal-body">
-                <form action="result.php" method="get" class="form-horizontal">
-                    <div class="form-group">
-                        <div class="col-lg-2">
-                            <label for="Elemento">Elemento</label>
-                            <input type="text" class="form-control" name="Elemento" id="Elemento" required="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-10">
-                            <label for="Elemento">Selecione um Arquivo</label>
-                            <div class="radio">
-                                <?php foreach($files as $f): ?>
-                                    <label>
-                                        <input type="radio" name="optionSelection" value="<?= $f['Nome'] ?>" required=""><?= $f['Nome'] ?><br/>
-                                        <small class="list-group-item-heading">Conteúdo: <?= $f['Conteudo'] ?></small>
-                                    </label>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" name="optionTipo" id="optionTipo" />
-                    <button type="submit" class="btn btn-primary">Verificar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="source-modal3" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Contingência</h4>
-            </div>
-            <div class="modal-body">
-                <form action="result.php" method="get">
-                    <div class="form-group">
-                        <div class="col-lg-6">
-                            <label for="Elemento">Selecione o primeiro conjunto</label>
-                                <?php foreach($files as $f): ?>
-                                    <div class="radio  radio-primary">
-                                        <label>
-                                            <input type="radio" name="optionSelection1" value="<?= $f['Nome'] ?>" required=""><?= $f['Nome'] ?><br/>
-                                            <small class="list-group-item-heading">Conteúdo: <?= $f['Conteudo'] ?></small>
-                                        </label>
-                                    </div>
-                                <?php endforeach; ?>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-6">
-                            <label for="Elemento">Selecione o segundo conjunto</label>
-                                <?php foreach($files as $f): ?>
-                                    <div class="radio radio-primary">
-                                        <label>
-                                            <input type="radio" name="optionSelection2" value="<?= $f['Nome'] ?>" required=""><?= $f['Nome'] ?><br/>
-                                            <small class="list-group-item-heading">Conteúdo: <?= $f['Conteudo'] ?></small>
-                                        </label>
-                                    </div>
-                                <?php endforeach; ?>
-                        </div>
-                    </div>
-                    <input type="hidden" name="optionTipo" id="optionTipo2" />
-                    <button type="submit" class="btn btn-primary">Verificar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="source-modal4" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Questão 2.1</h4>
-            </div>
-            <div class="modal-body">
-                <p>
-                1	- Prove as propriedades idempotência, comutativa e associativa da união.<br/><br/>
-
-                1.1.	Idempotência: A ∪ A=A<br/>
-                1.1.1.	A ∪ A ⊆ A ⇒ (definição de união)<br/>
-                x ∈ A ∪ A ⇒ (Idempotência da disjunção)<br/>
-                x ∈ A ∨ x ∈ A<br/>
-                x ∈ A<br/><br/>
-                1.1.2.	A ⊆ A ∪ A<br/>
-                x ∈ A ⇒ (disjunção)<br/>
-                x ∈ A ∨ x ∈ A ⇒  (definição de união)<br/>
-                x ∈ A ∪ A  ⇒ (Idempotência da disjunção)<br/>
-                A ∪ A<br/><br/>
-                1.2.	Comutativa: A ∪ B=B ∪ A<br/>
-                1.2.1.	A ∪ B ⊆ B ∪ A<br/>
-                x ∈ A ∪ B ⇒ (definição de união)<br/>
-                x ∈ A ∨ x ∈ B ⇒ (comutatividade da disjunção)<br/>
-                x ∈ B ∪ x ∈ A ⇒ (definição de união)<br/>
-                B U A<br/><br/>
-                1.2.2.	B ∪ A ⊆ A ∪ B<br/>
-                x ∈ B ∪ A ⇒ (definição de união)<br/>
-                x ∈ B ∨ x ∈ A ⇒ (comutatividade da disjunção)<br/>
-                x ∈ A ∪ x ∈ B ⇒ (definição de união)<br/>
-                A U B<br/><br/>
-
-                1.3.	Associativa: A ∪ (B ∪ C)=(A ∪ B) ∪ C<br/>
-                1.3.1.	A ∪ (B ∪ C) ⊆ (A ∪ B) ∪ C<br/>
-                x ∈ A ∪ (B ∪ C) ⇒ (definição de união)<br/>
-                x ∈ A  ∨  x ∈ (B ∪ C) ⇒ (definição de união)<br/>
-                x ∈ A ∨ (x ∈ B ∨ x ∈ C) ⇒ (Asso. Da disjunção)<br/>
-                (x ∈ A ∪ x ∈ B) ∪ x ∈ C ⇒ (definição de união)<br/>
-                x ∈ (A ∪ B) ∪ x ∈ C ⇒ (definição de união)<br/>
-                (A ∪ B) ∪ C<br/><br/>
-
-                1.3.2.	(A ∪ B) ∪ C ⊆ A ∪ (B ∪ C)<br/>
-                x ∈ (A ∪ B) ∪ x ∈ C ⇒ (definição de união)<br/>
-                x ∈ (A ∪ B) ∨ x ∈ C ⇒ (definição de união)<br/>
-                (x ∈ A ∨ x ∈ B) ∨ x ∈ C ⇒ (Asso. Da disjunção)<br/>
-                x ∈ A ∨ (x ∈ B ∨ x ∈ C) ⇒ (definição de união)<br/>
-                x ∈ A ∪ (x ∈ B ∪ x ∈ C ) ⇒ (definição de união)<br/>
-                A ∪ (B ∪ C)
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
-
+<?php if(isset($_GET['msg'])): ?>
 <div id="source-modal5" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Questão 2.1</h4>
+                <h4 class="modal-title">Informação</h4>
             </div>
             <div class="modal-body">
-                Exercício 2.4: Suponha o conjunto universo S={p,q,r,s,t,u,v,w} bem como os seguintes conjuntos:<br/><br/>
-
-                A={p,q,r,s}<br/>
-                B={r,t,v}<br/>
-                C={p,s,t,u}<br/>
-                Determine:<br/><br/>
-
-                a) B∩C = {t}<br/>
-                b) A∪C = {p,q,r,s,t,u}<br/>
-                c) ∼C = {q,r,v,w}<br/>
-                d) A∩B∩C = Ø<br/>
-                e) ∼(A∪B) = {v,w}<br/>
-                f) (A∪B)∩∼C = {q,r,v}
+                <h3><?= $_GET['msg'] ?></h3>
             </div>
         </div>
     </div>
 </div>
-
+<?php endif; ?>
 <div id="source-modal6" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -373,32 +239,13 @@ if(empty($result2) && count($result1) > 0){<code style="color:#15c000;">//Verifi
     $(document).ready(function () {
         $.material.init();
         $("#btnVerificar").click(function(){
-            var v = $('input[name="optionTipo"]:checked').val();
-            if(v == "Pertinencia"){
-                $("#optionTipo").val("Pertinencia");
-                $("#source-modal2").modal();
-            }else{
-                if(v == "Contingencia"){
-                    $("#optionTipo2").val("Contingencia");
-                    $("#source-modal3").modal();
-                }else{
-                    $("#formPrincipal").submit();
-                }
-            }
+            $("#inputVerificar").val("Sim");
+            $("#formPrincipal2").submit();
         });
     });
-    function modalFunction(){
-        $("#source-modal").modal();
-    }
-    function modalQuestao21(){
-        $("#source-modal4").modal();
-    }
-    function modalQuestao24(){
+    <?php if(isset($_GET['msg'])): ?>
         $("#source-modal5").modal();
-    }
-    function modalSobre(){
-        $("#source-modal6").modal();
-    }
+    <?php endif; ?>
 </script>
 </body>
 </html>
