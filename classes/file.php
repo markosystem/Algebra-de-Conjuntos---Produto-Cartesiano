@@ -11,9 +11,15 @@ class file {
     function moveFiles($arquivos){
         try{
             $files = self::loadingFilesDirectorios("files/");
+            $filesOutput = self::loadingFilesDirectorios("output/","output");
             foreach($files as $f){
                 if(file_exists("E:/xampp/htdocs/Algebra-de-Conjuntos---Produto-Cartesiano/files/".$f['Nome'])){
                     unlink("E:/xampp/htdocs/Algebra-de-Conjuntos---Produto-Cartesiano/files/".$f['Nome']);
+                }
+            }
+            foreach($filesOutput as $f){
+                if(file_exists("E:/xampp/htdocs/Algebra-de-Conjuntos---Produto-Cartesiano/output/".$f['Nome'])){
+                    unlink("E:/xampp/htdocs/Algebra-de-Conjuntos---Produto-Cartesiano/output/".$f['Nome']);
                 }
             }
            $location = 'E:/xampp/htdocs/Algebra-de-Conjuntos---Produto-Cartesiano/files/';
