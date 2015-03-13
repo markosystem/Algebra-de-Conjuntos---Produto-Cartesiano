@@ -11,7 +11,7 @@ if(isset($_POST)){
     if(!isset($_POST['Verificar'])){
         $msg = $instancia->moveFiles($_FILES['inputFiles']);
     }else{
-        $files = $instancia->loadingFilesDirectorios("E:/xampp/htdocs/Produto-Cartesiano/files");
+        $files = $instancia->loadingFilesDirectorios("E:/xampp/htdocs/Algebra-de-Conjuntos---Produto-Cartesiano/files");
         $filePrincipal = $files[0]["Estrutura"];
         $filesComplementares = "";
         $i = 1;
@@ -33,9 +33,9 @@ if(isset($_POST)){
         $msg = "Arquivo saida gerado com sucesso";
     }
     if(isset($msg)){
-        header("location:/Produto-Cartesiano?msg=".$msg);
+        header("location:/Algebra-de-Conjuntos---Produto-Cartesiano?msg=".$msg);
     }else{
-        header("location:/Produto-Cartesiano");
+        header("location:/Algebra-de-Conjuntos---Produto-Cartesiano");
     }
 }else{
     echo "Necessita de uma requisicao POST";
